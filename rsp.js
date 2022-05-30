@@ -1,14 +1,7 @@
 const rsp=["Rock", "Scissors", "Paper"];
-
 function computerPlay(indx){
     return rsp[indx];
 }
-
-function titleCase(string){
-    return string[0].toUpperCase() + string.slice(1).toLowerCase();
-}
-
-
 function playRound(playerSelection, computerSelection){
     if (playerSelection==computerSelection){
         return "Draw";
@@ -40,43 +33,135 @@ function playRound(playerSelection, computerSelection){
 
 }
 
+// Add event listener for each buttons ;
+let pwincount=0;
+let cwincount=0;
+let winCount=[0,0];
 
-//    console.log("Player: "+rsp_user_input);
-//    console.log("Computer: "+computerPlay());
+const buttons=document.querySelectorAll('button');
+buttons.forEach(button=>button.addEventListener('click',game));
+
+function game(e){
+
+    let playerSelection=this.outerText;
+    let rand_idx=Math.floor(Math.random() * 3) ;
+    let computerSelection = computerPlay(rand_idx);
+    let result=playRound(playerSelection,computerSelection);     
+ 
+    
+    // Clear message from previous game
+    var paragraphs = document.getElementsByClassName('message2')
+    const fix_length=paragraphs.length;
+    for (var i = 0; i <fix_length; i++) {
+        console.log(i, paragraphs.length)
+        paragraphs[0].remove()
+     }
 
 
-//    console.log(playRound(rsp_user_input,computerSelection));
 
-// 5 game and count win/lost score , use loop if possible
+    
+    if (result=="Player Win"){
 
-let arr=[];
-function game(){
-    let pwincount=0;
-    let cwincount=0;
-    let wincount_res=[];
-    for (let i=0; i<5; i++){
-        let playerSelection=window.prompt("RSP? Your choice", "Rock");
-        let rand_idx=Math.floor(Math.random() * 3) ;
-        let computerSelection = computerPlay(rand_idx);
-        
-        let rsp_user_input=titleCase(playerSelection);
-        let result=playRound(rsp_user_input,computerSelection);     
+         pwincount=pwincount+1;
+         winCount=[pwincount,cwincount];
 
-        console.log(result);
+         const divButton=document.getElementById("buttons");
 
-        if (result=="Player Win"){
-            pwincount=pwincount+1;
-        }
-        else if (result=="Computer Win"){
-            cwincount=cwincount+1;
-        }
+         const message=document.createElement("p");
+         message.classList.add('message');
+         message.textContent=`Player Win - \n Player: ${winCount[0]}, Computer: ${winCount[1]} `;
 
-        wincount_res=[pwincount,cwincount];
+
+        divButton.appendChild(message);
+
+
     }
-    return wincount_res;
+    else if (result=="Computer Win"){
+
+        cwincount=cwincount+1;
+        winCount=[pwincount,cwincount];
+        const divButton=document.getElementById("buttons");
+        const message=document.createElement("p");
+        message.classList.add('message');
+        message.textContent=`Computer Win - \n Player: ${winCount[0]}, Computer: ${winCount[1]} `;
+        divButton.appendChild(message);
+    }
+
+    else {
+        const divButton=document.getElementById("buttons");
+
+        const message=document.createElement("p");
+        message.classList.add('message');
+        message.textContent=`Draw - \n Player: ${winCount[0]}, Computer: ${winCount[1]} `;
+
+        divButton.appendChild(message);
+
+    }
+    console.log(winCount);
+
+    // Action item - 1.  Clear log 
+    //               2. Remove HTML Tag 
+    //               3. Initialize Win count and repeat the game ;
+    
+    if (
+        (winCount[0]>=5&&winCount[1]<5)||(winCount[1]>=5&&winCount[0]<5)
+        ){
+
+            if (winCount[0]>=5&&winCount[1]<5){
+                const divButton=document.getElementById("buttons");
+
+                var paragraphs = document.getElementsByTagName('p')
+
+                const fix_length=paragraphs.length;
+    
+                for (var i = 0; i <fix_length; i++) {
+                    console.log(i, paragraphs.length)
+                    paragraphs[0].remove()
+                 }
+
+                const message2=document.createElement("p");
+                message2.classList.add('message2');
+                message2.textContent=`Final Result : Player Win ! \n Player: ${winCount[0]}, Computer: ${winCount[1]}  `;
+                divButton.appendChild(message2);
+                
+
+            }
+    
+            else if (winCount[1]>=5&&winCount[0]<5){
+                const divButton=document.getElementById("buttons");    
+
+              // const paragraph = document.getElementsByClassName("message");
+                //  divButton[0].removeAttribute('message');
+              //  paragraph.remove();
+
+              var paragraphs = document.getElementsByTagName('p')
+
+              const fix_length=paragraphs.length;
+  
+              for (var i = 0; i <fix_length; i++) {
+                  console.log(i, paragraphs.length)
+                  paragraphs[0].remove()
+               }
+
+                const message2=document.createElement("p");
+                message2.classList.add('message2');
+                message2.textContent=`Final Result : Computer Win ! \n Player: ${winCount[0]}, Computer: ${winCount[1]}  `;
+                divButton.appendChild(message2);
+    
+            }
+
+            //Initialize winCount again//
+            winCount=[0,0];    
+            pwincount=0;
+            cwincount=0;
+            
+        }
+
+    return;
 }
 
-const count=game();
+/*
+
 
 function judgement(count){
 
@@ -104,4 +189,4 @@ function judgement(count){
 judgement(count);
 
 
-
+*/
